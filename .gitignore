@@ -2,3 +2,12 @@
 .Xauthority
 .serverauth*
 .viminfo
+.lesshst
+.getmail/oldmail*
+.maildir
+.maildir-sent
+.dbus/session-bus/*
+.themes/*
+projects/
+.ssh/known_hosts
+.fontconfig/*.cache-2
