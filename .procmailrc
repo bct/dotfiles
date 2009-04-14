@@ -1,0 +1,45 @@
+PATH=/bin:/usr/bin:/usr/local/bin
+MAILDIR=$HOME/.maildir/
+LISTS=$MAILDIR/lists
+DEFAULT=$MAILDIR
+
+#:0
+#* ^(To|From): .*ualberta\.ca
+#$MAILDIR/ualberta/
+
+:0
+* ^List-Id: <atom-syntax.imc.org>
+$LISTS/atom-syntax/
+
+:0
+* ^List-Id: <atom-protocol.imc.org>
+$LISTS/atom-protocol/
+
+:0
+* ^List-Id: ActiveRDF users <activerdf.lists.deri.org>
+$LISTS/activerdf/
+
+:0
+* ^Sender: owner-cryptography@metzdowd.com
+$LISTS/crypto/
+
+:0
+* ^List-Id: .*(jdev\.jabber|gajim-devel|security\.xmpp|standards\.xmpp|social\.xmpp)
+$MAILDIR/lists/xmpp/
+
+:0
+* ^List-Id: .*dgd.dworkin.nl
+$LISTS/mud/
+
+:0
+* ^List-Id: mud-dev2
+$LISTS/mud/
+
+# miscellaneous mailing lists
+:0
+* ^Mailing-List:.*
+$MAILDIR/misc/
+
+:0
+* ^List-Id:.*
+$MAILDIR/misc/
