@@ -1,0 +1,3 @@
+#!/bin/sh
+
+urxvt -fn 'xft:Aerial Mono:pixelsize=18' -T 'large print'
