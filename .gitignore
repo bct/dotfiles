@@ -11,3 +11,13 @@
 projects/
 .ssh/known_hosts
 .fontconfig/*.cache-2
+.sqlite_history
+.mutt/hcache
+.mairix-db
+.mairix-results
+.mysql_history
+.cache
+.gajim
+.vim/colors
+.vimperator/info
+.local
