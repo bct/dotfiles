@@ -8,6 +8,9 @@ set shiftwidth=2
 " don't break lines in the middle of words
 set linebreak
 
+" oooh so pretty
+colorscheme railscasts
+
 filetype indent on
 filetype on
 
