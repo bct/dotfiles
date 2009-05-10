@@ -15,3 +15,8 @@ if [[ $- != *i* ]] ; then
 fi
 
 set -o vi
+
+# make ^L work
+bind -m vi-insert 'Control-l: clear-screen'
+
+export PATH="$PATH:/home/bct/bin"
