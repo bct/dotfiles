@@ -16,12 +16,13 @@ WMII_BACKGROUND='#333333'
 WMII_FONT='-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
 
 set -- $(echo $WMII_NORMCOLORS $WMII_FOCUSCOLORS)
-WMII_MENU="dmenu -fn '$WMII_FONT' -nf '$1' -nb '$2' -sf '$4' -sb '$5'"
+WMII_MENU="dmenu -b -fn '$WMII_FONT' -nf '$1' -nb '$2' -sf '$4' -sb '$5'"
 WMII_9MENU="wmii9menu -font '$WMII_FONT' -nf '$1' -nb '$2' -sf '$4' -sb '$5' -br '$6'"
-WMII_TERM="xterm"
+WMII_TERM="urxvt"
 
 # Column Rules
 wmiir write /colrules <<!
+/pr/ -> 50+50
 /.*/ -> 58+42
 !
 
@@ -29,8 +30,10 @@ wmiir write /colrules <<!
 wmiir write /tagrules <<!
 /XMMS.*/ -> ~
 /MPlayer.*/ -> ~
+/Vimperator/ -> web
+/Gajim/ -> im
 /.*/ -> sel
-/.*/ -> 1
+/.*/ -> ?
 !
 
 # Status Bar Info
