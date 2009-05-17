@@ -20,3 +20,8 @@ set -o vi
 bind -m vi-insert 'Control-l: clear-screen'
 
 export PATH="$PATH:/home/bct/bin"
+
+# fuuuuuck you Firefox
+[ -d ~/Desktop ] && rm ~/Desktop
+
+export HISTCONTROL=ignoredups
