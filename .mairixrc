@@ -1,5 +1,5 @@
 base=/home/bct
-maildir=.maildir:.maildir/ualberta:.maildir/ciibis:.maildir/archives:.maildir/archives/*:.maildir/lists/*
+maildir=.maildir:.maildir/union:.maildir/ualberta:.maildir/ciibis:.maildir/misc:.maildir/uzbl:.maildir/archives:.maildir/archives/*:.maildir/lists/*:.maildir-sent
 omit=.maildir/archives/cur,.maildir/archives/tmp,.maildir/archives/new
 
 mfolder=.mairix-results

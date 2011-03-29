@@ -8,6 +8,10 @@ DEFAULT=$MAILDIR
 #$MAILDIR/ualberta/
 
 :0
+*^List-Id: .*iww.org
+$MAILDIR/union/
+
+:0
 * ^List-Id: <atom-syntax.imc.org>
 $LISTS/atom-syntax/
 
@@ -24,9 +28,10 @@ $LISTS/activerdf/
 $LISTS/crypto/
 
 :0
-* ^List-Id: .*(jdev\.jabber|gajim-devel|security\.xmpp|standards\.xmpp|social\.xmpp)
-$MAILDIR/lists/xmpp/
+* ^List-Id: .*(jdev\.jabber|gajim-devel|security\.xmpp|standards\.xmpp|social\.xmpp|members\.xmpp)
+$LISTS/xmpp/
 
+# MUD-L and DGD
 :0
 * ^List-Id: .*dgd.dworkin.nl
 $LISTS/mud/
@@ -35,7 +40,7 @@ $LISTS/mud/
 * ^List-Id: mud-dev2
 $LISTS/mud/
 
-# miscellaneous mailing lists
+# all other mailing lists
 :0
 * ^Mailing-List:.*
 $MAILDIR/misc/
