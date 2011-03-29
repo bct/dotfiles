@@ -1,0 +1,54 @@
+###functions
+
+# extract archives.  should handle multiple files.
+function x() {
+	 case $@ in 
+	     *.tar.bz2)		tar -xvjf "$@"	;;	
+	     *.tar.gz)		tar -xvzf "$@"	;;
+	     *.bz2)		bunzip2 "$@"	;;
+	     *.rar)		unrar x "$@"	;;
+	     *.gz)		gunzip "$@"	;;
+	     *.tar) 		tar xf "$@"	;;
+	     *.tbz2)		tar -xvjf "$@"	;;
+	     *.tgz)		tar -xvzf "$@"	;;
+	     *.zip)		unzip "$@"  	;;
+	     *.xpi)		unzip "$@"  	;;
+	     *.Z)		uncompress "$@"	;;
+	     *.7z)		7z x "$@"	;;
+	     *.ace)		unace e "$@"	;;
+	     *.arj)		arj -y e "$@"	;;
+	     *)			echo "'$@' cannot be extracted via x()"	;;
+	 esac
+}
+
+# packs $2-$n into $1 depending on $1's extension.  add more file types as needed
+function pack() {
+	 if [ $# -lt 2 ] ; then
+	    echo -e "\npack() usage:"
+	    echo -e "\tpack archive_file_name file1 file2 ... fileN"
+	    echo -e "\tcreates archive of files 1-N\n"
+	 else 
+	   DEST=$1
+	   shift
+
+	   case $DEST in 
+		*.tar.bz2)		tar -cvjf $DEST "$@" ;;  
+		*.tar.gz)		tar -cvzf $DEST "$@" ;;  
+		*.zip)			zip -r $DEST "$@" ;;
+		*.xpi)			zip -r $DEST "$@" ;;
+		*)				echo "Unknown file type - $DEST" ;;
+	   esac
+	 fi
+}
+
+# like sleep, but spits out a . every second
+function delay() {
+	 typeset -i NUM
+	 NUM=$1
+	 if [ $NUM -gt 0 ] ; then
+	     for i in `seq $NUM` ; do sleep 1 ; echo -n '.' ; done
+	     echo ""
+	 else
+	     echo "Invalid argument.  Please use a positive integer."
+	 fi
+}
