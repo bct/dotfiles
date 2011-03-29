@@ -19,8 +19,6 @@ Xcursor.theme: Neutral_Plus
 !URxvt*italicFont: -*-terminus-medium-r-*-*-12-120-*-*-*-*-*-*
 !URxvt*boldItalicFont: -*-terminus-medium-r-*-*-12-120-*-*-*-*-*-*
 
-URxvt*font: xft:Aerial Mono:pixelsize=11
-
 URxvt*saveLines: 32767
 URxvt*scrollBar: false
 URxvt*loginShell: true
@@ -29,69 +27,41 @@ URxvt*termName: rxvt-unicode
 urxvt*perl-lib: /usr/lib/urxvt/perl/
 !URxvt*perl-ext-common: default,matcher
 urxvt*perl-ext-common: default,matcher,searchable-scrollback
-URxvt*urlLauncher: firefox
+URxvt*urlLauncher: url-opener
 URxvt*matcher.button: 1
 URxvt*visualBell: true
 !URxvt*keysym.C-u: perl:matcher
 URxvt*urgentOnBell: true
 URxvt*cursorColor: #6dacd8
 
-! IR_Black
-!URxvt*background: #000000
-!URxvt*foreground: #DCDCCC
-!black
-!URxvt*color0: #4E4E4E
-!URxvt*color8: #7C7C7C
-!red
-!URxvt*color1: #FF6C60
-!URxvt*color9: #FFB6B0
-!green
-!URxvt*color2: #A8FF60
-!URxvt*color10: #CEFFAB
-!yellow
-!URxvt*color3: #FFFFB6
-!URxvt*color11: #FFFFCB
-!blue
-!URxvt*color4: #96CBFE
-!URxvt*color12: #FFFFCB
-!magenta
-!URxvt*color5: #FF73FD
-!URxvt*color13: #FF9CFE
-!cyan
-!URxvt*color6: #C6C5FE
-!URxvt*color14: #DFDFFE
-!white
-!URxvt*color7: #EEEEEE
-!URxvt*color15: #FFFFFF
- 
 ! Daisuke
-URxvt*background: #000000
-URxvt*foreground: #dcdccc
+!URxvt*background: #000000
+!URxvt*foreground: #dcdccc
 !black
-URxvt*color0: #1e1e1e
-URxvt*color8: #505050
+!URxvt*color0: #1e1e1e
+!URxvt*color8: #505050
 !red
-URxvt*color1: #b04020
-URxvt*color9: #dd4010
+!URxvt*color1: #b04020
+!URxvt*color9: #dd4010
 !green
-URxvt*color2: #afd700
-URxvt*color10: #daff30
+!URxvt*color2: #afd700
+!URxvt*color10: #daff30
 !yellow
-URxvt*color3: #f7cf0a
-URxvt*color11: #fce70d
+!URxvt*color3: #f7cf0a
+!URxvt*color11: #fce70d
 !blue
-URxvt*color4: #3060aa
-URxvt*color12: #6099dd
+!URxvt*color4: #3060aa
+!URxvt*color12: #6099dd
 !magenta
-URxvt*color5: #d6156c
-URxvt*color13: #fe4365
+!URxvt*color5: #d6156c
+!URxvt*color13: #fe4365
 !cyan
-URxvt*color6: #a0c2de
-URxvt*color14: #c9dee8
+!URxvt*color6: #a0c2de
+!URxvt*color14: #c9dee8
 !white
-URxvt*color7: #808080
-URxvt*color15: #b0b0b0
- 
+!URxvt*color7: #808080
+!URxvt*color15: #b0b0b0
+
 ! Light
 !URxvt*background: #f0f0f0
 !URxvt*foreground: #22303d
@@ -121,32 +91,34 @@ URxvt*color15: #b0b0b0
 !URxvt*color15: #444444
 
 ! Tango
+URxvt*background: black
+URxvt*foreground: #bbbbbb
 ! Black
-!URxvt*color0: #1e1e1e
-!URxvt*color8: #555753
+URxvt*color0: #1e1e1e
+URxvt*color8: #555753
 ! Red
-!URxvt*color1: #CC0000
-!URxvt*color9: #EF2929
+URxvt*color1: #CC0000
+URxvt*color9: #EF2929
 ! Green
-!URxvt*color2: #4E9A06
-!URxvt*color10: #8AE234
+URxvt*color2: #4E9A06
+URxvt*color10: #8AE234
 ! Yellow
-!URxvt*color3: #C4A000
-!URxvt*color11: #FCE94F
+URxvt*color3: #C4A000
+URxvt*color11: #FCE94F
 ! Blue
-!URxvt*color4: #3465A4
-!URxvt*color12: #729FCF
+URxvt*color4: #3465A4
+URxvt*color12: #729FCF
 ! Purple
-!URxvt*color5: #75507B
-!URxvt*color13: #AD7FA8
+URxvt*color5: #75507B
+URxvt*color13: #AD7FA8
 ! Cyan
 ! have to use rgb: here, doesn't work otherwise :O
-!URxvt*color6: rgb:06/98/9A
-!URxvt*color14: #34E2E2
+URxvt*color6: rgb:06/98/9A
+URxvt*color14: #34E2E2
 ! White
-!URxvt*color7: #9f9f9f
-!URxvt*color15: #e0e0e0
- 
+URxvt*color7: #9f9f9f
+URxvt*color15: #e0e0e0
+
 ! Zenburn
 !URxvt*background: #3F3F3F
 !URxvt*foreground: #DCDCCC
@@ -174,7 +146,7 @@ URxvt*color15: #b0b0b0
 ! bright-cyan + bright-white
 !URxvt*color14: #93e0e3
 !URxvt*color15: #ffffff
- 
+
 !-------------------------------------------------------------------------------
 !
 !
