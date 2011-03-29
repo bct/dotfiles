@@ -21,6 +21,9 @@ autocmd FileType python,ruby,haskell,erlang,c set nospell
 " or when i'm configuring
 autocmd BufRead /etc/* set nospell
 
+" flow paragraphs real nice (when I'm working with text)
+autocmd FileType mail set formatoptions+=aw
+
 " be OCD about stray whitespace
 highlight RedundantSpaces term=standout ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
@@ -33,6 +36,7 @@ autocmd BufNewFile,BufRead /home/bct/projects/free-library-on-rails* set ts=4
 autocmd BufNewFile,BufRead /home/bct/projects/free-library-on-rails* set sw=4
 
 " gajim
-autocmd BufNewFile,BufRead /home/bct/projects/gajim* set noexpandtab
-autocmd BufNewFile,BufRead /home/bct/projects/gajim* set ts=3
-autocmd BufNewFile,BufRead /home/bct/projects/gajim* set shiftwidth=3
+autocmd BufNewFile,BufRead /home/bct/projects/gajim* set expandtab
+autocmd BufNewFile,BufRead /home/bct/projects/gajim* set ts=4
+autocmd BufNewFile,BufRead /home/bct/projects/gajim* set shiftwidth=4
+autocmd BufNewFile,BufRead /home/bct/projects/gajim* set tags=/home/bct/projects/gajim/tags
