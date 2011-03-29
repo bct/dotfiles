@@ -1,0 +1,3 @@
+#!/bin/sh
+
+urxvtc -fn 'xft:Terminus:pixelsize=23' -T 'large print' "$@"
