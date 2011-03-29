@@ -23,7 +23,7 @@ WMII_TERM="urxvt"
 # Column Rules
 wmiir write /colrules <<!
 /pr/ -> 50+50
-/.*/ -> 58+42
+/.*/ -> 55+45
 !
 
 # Tagging Rules
