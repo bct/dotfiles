@@ -229,6 +229,9 @@ set ebind     = @mode_bind global,-insert
 @cbind  -gg<Seeks: >_         = uri http://www.seeks-project.info/search.php/search?expansion=1&action=expand&q=\@<encodeURIComponent(%r)>\@
 @cbind  -nm<NzbMatrix: >_     = uri http://nzbmatrix.com/nzb-search.php?search=\@<encodeURIComponent(%r)>\@
 @cbind  -no<NzbsOrg: >_       = uri http://nzbs.org/index.php?action=search&catid=0&q=\@<encodeURIComponent(%r)>\@
+@cbind  -js<Javascript: >_    = uri http://google.ca/search?q=site:developer.mozilla.org+\@<encodeURIComponent(%r)>\@
+
+@cbind  -qr = script @scripts_dir/qr.js
 
 # Handy binds
 # Set function shortcut
@@ -345,5 +348,7 @@ set disable_3rd_party_cookies = 1
 @cbind E = spawn @scripts_dir/external_editor.sh
 
 set default_encoding = utf8
+
+set javascript_windows = 1
 
 # vim: set fdm=syntax:
