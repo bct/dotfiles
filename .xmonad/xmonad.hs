@@ -43,16 +43,14 @@ import XMonad.Layout.Reflect
 -- to work.
 myTopics :: [Topic]
 myTopics =
- [ "?" , "web", "mail", "mi-go", "movie", "gajim", "pdf", "doc", "ebook", "gimp", "photos", "uzbl", "vm", "ciibis", "wememe", "inkdit" ]
+ [ "?" , "web", "mail", "mi-go", "pdf", "doc", "ebook", "gimp", "photos", "uzbl", "vm", "ciibis", "wememe" ]
 
 myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
     { topicDirs = M.fromList $
-        [ ("gajim",  "projects/gajim")
-        , ("uzbl",   "projects/uzbl")
+        [ ("uzbl",   "projects/uzbl")
         , ("pdf",    "pdf")
         , ("ciibis", "irl/ciibis")
-        , ("inkdit", "irl/inkdit")
         ]
 
     , defaultTopicAction = const spawnShell
@@ -232,7 +230,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- restarting (with 'mod-q') to reset your layout state to the new
 -- defaults, as xmonad preserves your old layout settings by default.
 --
-myLayout = avoidStruts $ webWorkspace $ gajimWorkspace $ imWorkspace $ dashboard $ gimp $ (tiled ||| tabbed ||| Grid ||| Full)
+myLayout = avoidStruts $ webWorkspace $ gajimWorkspace $ imWorkspace $ dashboard $ gimp $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
   where
      dashboard       = onWorkspace "?"      Grid
      imWorkspace     = onWorkspace "talk"  $ gridIM (1%7) (Role "roster")
