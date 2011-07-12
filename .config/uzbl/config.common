@@ -119,6 +119,7 @@ set useragent         = Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2
 
 #modmap <From>          <To>
 @modmap <Control>       <Ctrl>
+@modmap <Mod1>          <Alt>
 @modmap <ISO_Left_Tab>  <Shift-Tab>
 @modmap <space>         <Space>
 @modmap <KP_Enter>      <Enter>
@@ -233,15 +234,16 @@ set ebind     = @mode_bind global,-insert
 
 @cbind  -qr = script @scripts_dir/qr.js
 
+@cbind  -recipe<Recipe Name: >_               = spawn /home/bct/projects/recipes/bin/uzbl-add-recipe.rb %s
+
 # Handy binds
 # Set function shortcut
 @cbind  s<var:>_<value:>_  = set %1 = %2
 
-# Use socat to directly inject commands into uzbl-core and view events
-# raised by uzbl-core:
-@cbind  <Ctrl><Alt>t  = spawn 'urxvt -e socat unix-connect:"$UZBL_SOCKET" -'
+# Use socat to directly inject commands and view events
+@cbind  <Ctrl><Alt>t  = sh 'urxvt -e socat "$UZBL_SOCKET" -'
 
-@cbind  <Ctrl><Alt>v  = spawn urxvt -e sh -c 'echo js document.documentElement.innerHTML | socat unix-connect:\"$UZBL_SOCKET\" - | vim -'
+@cbind  <Ctrl><Alt>v  = spawn urxvt -e sh -c 'echo js document.documentElement.innerHTML | socat "$UZBL_SOCKET" - | vim -'
 
 # Uri opening prompts
 @cbind  o<uri:>_       = uri %s

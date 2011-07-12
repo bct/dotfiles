@@ -1,11 +1,17 @@
 let mapleader = "-"
 
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
 set encoding=utf-8
 set fileencoding=utf-8
 
 set expandtab
 set tabstop=2
 set shiftwidth=2
+
+" use a leader key that's convenient for dvorak
+let mapleader = '-'
 
 " don't break lines in the middle of words
 set linebreak
