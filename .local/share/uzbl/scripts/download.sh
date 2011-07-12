@@ -11,10 +11,11 @@
 uri="$1"
 shift
 
+safe_suggestion="$(echo "$1" | sed -e 's|/|-|g')"
 safe_uri="$( echo "$uri" | sed -e 's/\W/-/g' )"
 
 # a filename suggested by the server or based on the URL
-suggested_filename="${1:-$safe_uri}"
+suggested_filename="${safe_suggestion:-$safe_uri}"
 shift
 
 # the mimetype of the file being downloaded

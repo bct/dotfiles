@@ -70,7 +70,7 @@ set download_handler        = sync_spawn @scripts_dir/download.sh
 @on_event   ROOT_ACTIVE    @set_mode command
 
 # Scroll percentage calculation
-@on_event   SCROLL_VERT    set scroll_message = \@<(function(){var p='--';if(%3!=%2){p=(%1/(%3-%4));p=Math.round(10000*p)/100;};return p+'%';})()>\@
+@on_event   SCROLL_VERT    set scroll_message = \@<(function(curr, min, max, size){if(max == size) return '--'; var p=(curr/(max - size)); return Math.round(10000*p)/100;})(%1,%2,%3,%4)>\@%
 
 # === Behaviour and appearance ===============================================
 
