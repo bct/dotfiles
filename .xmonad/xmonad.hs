@@ -30,10 +30,10 @@ import XMonad.Actions.CycleWS(prevWS, nextWS, toggleWS)
 
 import XMonad.Actions.TopicSpace
 
-import XMonad.Actions.SpawnOn -- (manageSpawn, mkSpawner, shellPromptHere, spawnOn)
+import XMonad.Actions.SpawnOn(spawnHere, shellPromptHere, spawnOn)
 
 import Control.Monad(Monad(return, (>>=), (>>)), Functor(..), (=<<), mapM, sequence, (<=<), zipWithM_)
-import XMonad.Actions.GridSelect(gridselect, GSConfig(gs_navigate), defaultGSConfig, goToSelected)
+import XMonad.Actions.GridSelect
 
 import XMonad.Layout.Reflect
 
@@ -92,13 +92,24 @@ myTopicConfig = TopicConfig
 
 wsgrid = gridselect gsConfig <=< asks $ map (\x -> (x,x)) . workspaces . config
 
+myNavigator :: TwoD a (Maybe a)
+--myNavigator = defaultNavigation
 -- custom gridselect keybindings (hjkl = htns)
-gsConfig = defaultGSConfig { gs_navigate = neiu `M.union` gs_navigate (defaultGSConfig `asTypeOf` gsConfig) }
-    where neiu = M.insert (0, xK_space) (const (0,0)) $ M.map (\(x,y) (a,b) -> (x+a,y+b)) $ M.fromList
-            [((0, xK_h),(-1, 0))
-            ,((0, xK_t),( 0, 1))
-            ,((0, xK_n),( 0,-1))
-            ,((0, xK_s),( 1, 0))]
+myNavigator = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+  where navKeyMap = M.fromList [
+           ((0,xK_Escape), cancel)
+          ,((0,xK_Return), select)
+          ,((0,xK_slash) , substringSearch myNavigator)
+          ,((0,xK_h)     , move (-1,0)  >> myNavigator)
+          ,((0,xK_t)     , move (0,1)   >> myNavigator)
+          ,((0,xK_n)     , move (0,-1)  >> myNavigator)
+          ,((0,xK_s)     , move (1,0)   >> myNavigator)
+          ,((0,xK_space) , setPos (0,0) >> myNavigator)
+          ]
+        -- The navigation handler ignores unknown key symbols
+        navDefaultHandler = const myNavigator
+
+gsConfig = defaultGSConfig { gs_navigate = myNavigator }
 
 promptedGoto  = wsgrid >>= flip whenJust (switchTopic myTopicConfig)
 promptedShift = wsgrid >>= \x -> whenJust x $ \y -> windows (W.greedyView y . W.shift y)
@@ -202,8 +213,7 @@ spawnShell = currentTopicDir myTopicConfig >>= spawnShellIn
 spawnShellIn :: Dir -> X ()
 spawnShellIn dir = do
   t <- asks (terminal . config)
-  sp <- mkSpawner
-  spawnHere sp $ "cd " ++ dir ++ " && " ++ t
+  spawnHere $ "cd " ++ dir ++ " && " ++ t
 
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
