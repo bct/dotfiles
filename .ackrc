@@ -1,4 +1,9 @@
+# search HAML and SASS
 --type-add
 html=.haml
+
 --type-add
 css=.sass,.scss
+
+# this file contains a ton of common words, all on one line
+--ignore-file=is:zxcvbn.js
