@@ -1,7 +1,6 @@
 syntax on
 
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+call pathogen#infect()
 
 set encoding=utf-8
 set fileencoding=utf-8
@@ -14,6 +13,11 @@ set shiftwidth=2
 set linebreak
 
 set hlsearch
+
+set laststatus=2
+
+set relativenumber
+set number
 
 " use a leader key that's convenient for dvorak
 let mapleader = '-'
@@ -33,7 +37,7 @@ augroup vimrcEx
 augroup END
 
 " oooh so pretty
-colorscheme railscasts
+"colorscheme railscasts
 
 filetype indent on
 filetype plugin on
@@ -42,6 +46,12 @@ filetype on
 " be OCD about stray whitespace
 highlight RedundantSpaces term=standout ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
+
+" default syntastic colours are hard to read
+highlight SyntasticWarning ctermfg=254 ctermbg=088
+highlight SignColumn ctermbg=236
+
+let g:syntastic_ruby_checkers=['rubocop']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC KEY MAPS
@@ -73,13 +83,11 @@ inoremap <s-tab> <c-n>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MAPS TO JUMP TO SPECIFIC COMMAND-T TARGETS AND FILES
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>ga :CommandTFlush<cr>\|:CommandT app/assets<cr>
-map <leader>gv :CommandTFlush<cr>\|:CommandT app/views<cr>
-map <leader>gc :CommandTFlush<cr>\|:CommandT app/controllers<cr>
-map <leader>gm :CommandTFlush<cr>\|:CommandT app/models<cr>
-map <leader>gh :CommandTFlush<cr>\|:CommandT app/helpers<cr>
-map <leader>gl :CommandTFlush<cr>\|:CommandT lib<cr>
-map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
+map <leader>ga :CtrlP admin<cr>
+map <leader>go :CtrlP ops<cr>
+map <leader>gl :CtrlP lib<cr>
+map <leader>gt :CtrlP test<cr>
+map <leader>f :CtrlP<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SWITCH BETWEEN TEST AND PRODUCTION CODE
@@ -116,9 +124,6 @@ nnoremap <leader>. :call OpenTestAlternate()<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>t :call RunTestFile()<cr>
 map <leader>T :call RunNearestTest()<cr>
-map <leader>a :call RunTests('')<cr>
-map <leader>c :w\|:!script/features<cr>
-map <leader>w :w\|:!script/features --profile wip<cr>
 
 function! RunTestFile(...)
     if a:0
@@ -128,7 +133,7 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
+    let in_test_file = match(expand("%"), 'test') != -1
     if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")
@@ -156,15 +161,5 @@ function! RunTests(filename)
     :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
     :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
     :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    if match(a:filename, '\.feature$') != -1
-        exec ":!script/features " . a:filename
-    else
-        if filereadable("script/test")
-            exec ":!script/test " . a:filename
-        elseif filereadable("Gemfile")
-            exec ":!bundle exec rspec --color " . a:filename
-        else
-            exec ":!rspec --color " . a:filename
-        end
-    end
+    exec ":!bundle exec ./scripts/bin/test " . a:filename
 endfunction
