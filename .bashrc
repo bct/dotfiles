@@ -3,6 +3,9 @@
 # that can't tolerate any output.  So make sure this doesn't display
 # anything or bad things will happen !
 
+alias aoeu="setxkbmap us"
+alias asdf="setxkbmap dvorak"
+
 export LANG="en_GB.utf8"
 export RUBYOPT="-rubygems"
 export PYTHONPATH="/usr/local/lib/python2.6/site-packages/"
