@@ -37,58 +37,38 @@ import XMonad.Actions.GridSelect
 
 import XMonad.Layout.Reflect
 
+import XMonad.Actions.PhysicalScreens
+
+import Graphics.X11.ExtraTypes.XF86
+
 -- The list of all topics/workspaces of your xmonad configuration.
 -- The order is important, new topics must be inserted
 -- at the end of the list if you want hot-restarting
 -- to work.
 myTopics :: [Topic]
 myTopics =
- [ "?" , "web", "mail", "mi-go", "pdf", "doc", "ebook", "gimp", "photos", "uzbl", "vm", "ciibis", "wememe" ]
+ [ "stripe" , "web", "mail", "mi-go", "?", "doc", "music" ]
 
 myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
     { topicDirs = M.fromList $
-        [ ("uzbl",   "projects/uzbl")
-        , ("pdf",    "pdf")
-        , ("ciibis", "irl/ciibis")
+        [ ("stripe",   "stripe")
         ]
 
     , defaultTopicAction = const spawnShell
 
-    , defaultTopic = "?"
+    , defaultTopic = "stripe"
     , maxTopicHistory = 10
 
     , topicActions = M.fromList $
         [
-
           ("?",          spawnShell >>
-                         spawn "urxvtc -e htop")
-        , ("mail",       spawn "urxvtc -e mutt")
-        , ("web",        spawn "uzbl-browser")
-        , ("mi-go",      spawn "urxvtc -e ssh necronomicorp.com")
-        , ("ciibis",     spawnShell)
-
-        , ("pdf",        spawn "epdfview")
-        , ("gajim",      spawnShell >*> 4)
-        , ("movie",      spawn "uzbl-browser http://mi-go:5678/")
-
---        , ("windows",    spawn "urxvtc -e sudo qemu-system-x86_64 -hda xp.img -m 256 -soundhw all")
-
-        , ("ebook",      spawn "calibre")
-
-        , ("gimp",      spawn "gimp")
-
-        , ("photos",     spawn "geeqie")
-
-        --, ("conf",       spawnShell >> spawnShellIn "wd/ertai/private")
-        --, ("darcs",      spawnShell >*> 3)
-        --, ("haskell",    spawnShell >*> 2 >>
-        --                 spawnShellIn "wd/dev-haskell/ghc")
-        --, ("documents",  spawnShell >*> 2 >>
-        --                 spawnShellIn "Documents" >*> 2)
+                         spawn "urxvt -e htop")
+        , ("mi-go",      spawn "urxvt -e ssh mi-go.diffeq.com")
+        , ("web",        spawn "firefox")
+        , ("stripe",     spawnShell >*> 5)
         ]
     }
-
 
 wsgrid = gridselect gsConfig <=< asks $ map (\x -> (x,x)) . workspaces . config
 
@@ -126,7 +106,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask .|. shiftMask, xK_t     ), promptedShift)
 
     -- launch dmenu
-    , ((modMask,               xK_p     ), spawn "exe=`dmenu_path | dmenu` && eval \"exec $exe\"")
+    , ((modMask,               xK_p     ), spawn "dmenu_run")
 
     -- change keyboard layout
     , ((modMask              , xK_equal ),        spawn "setxkbmap dvorak; xmodmap /home/bct/.xmodmaprc")
@@ -150,8 +130,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- Move focus to the next window
     , ((modMask,               xK_j     ), windows W.focusDown)
 
-    , ((0,                     0x1008ff26), prevWS) -- XfF86Back
-    , ((0,                     0x1008ff27), nextWS) -- XfF86Forward
+    -- Media buttons
+--    , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer -c1 set Master 2-")
+--    , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer -c1 set Master 2+")
+--    , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")
+
+    -- Lock the screen
+    , ((modMask .|. shiftMask, xK_l     ), spawn "slock")
 
     -- Switch to the previously active workspace
     , ((modMask,               xK_r     ), toggleWS)
@@ -206,6 +191,17 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      [ ((modMask, k), switchNthLastFocused myTopicConfig i)
      | (i, k) <- zip [1..] [xK_1 .. xK_9]]
 
+     --
+     -- mod-{o,e}, Switch to physical/Xinerama screens 1 or 2
+     -- mod-shift-{w,e}, Move client to screen 1 or 2
+     --
+     --
+    ++
+     [((modMask .|. mask, key), f sc)
+         | (key, sc) <- zip [xK_o, xK_e] [0..]
+         , (f, mask) <- [(viewScreen, 0), (sendToScreen, shiftMask)]]
+
+
 
 spawnShell :: X ()
 spawnShell = currentTopicDir myTopicConfig >>= spawnShellIn
@@ -240,17 +236,14 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- restarting (with 'mod-q') to reset your layout state to the new
 -- defaults, as xmonad preserves your old layout settings by default.
 --
-myLayout = avoidStruts $ webWorkspace $ gajimWorkspace $ imWorkspace $ dashboard $ gimp $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
+myLayout = stripeWorkspace $ webWorkspace $ dashboard $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
   where
      dashboard       = onWorkspace "?"      Grid
-     imWorkspace     = onWorkspace "talk"  $ gridIM (1%7) (Role "roster")
-     gajimWorkspace  = onWorkspace "gajim" $ gridIM (1%7) (Role "roster")
      webWorkspace    = onWorkspace "web"    tabbed
+     stripeWorkspace = onWorkspace "stripe" $ Mirror tiled
 
-     gimp            = onWorkspace "gimp" $ withIM (0.11) (Role "gimp-toolbox") $ reflectHoriz $ withIM (0.15) (Role "gimp-dock") Full
-
-     tabbed   = tabbedAlways (shrinkText) tabTheme
-     tabTheme = defaultTheme { fontName = "-*-liberation serif-medium-r-normal--13-0-0-0-p-0-*" }
+     tabbed   = tabbedAlways shrinkText tabTheme
+     tabTheme = defaultTheme { fontName = "xft:Droid Sans:pixelsize=14" }
 
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -295,11 +288,11 @@ myLogHook = dynamicLogWithPP $ defaultPP {
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
-main = xmonad $ withUrgencyHook NoUrgencyHook $ myConfig
+main = xmonad =<< myDzen myConfig
 
 myConfig = defaultConfig {
   -- simple stuff
-    terminal           = "urxvtc",
+    terminal           = "urxvt",
     focusFollowsMouse  = True,
     borderWidth        = 1,
 
@@ -315,6 +308,17 @@ myConfig = defaultConfig {
 
   -- hooks, layouts
     layoutHook         = myLayout,
-    manageHook         = myManageHook <+> manageDocks,
-    logHook            = myLogHook
+    manageHook         = myManageHook <+> manageDocks
 }
+
+myDzen conf = statusBar ("dzen2 " ++ flags) dzenPP toggleStrutsKey conf
+ where
+    fg      = "'#a8a3f7'" -- n.b quoting
+    bg      = "'#3f3c6d'"
+    flags   = "-e 'onstart=lower' -w 800 -ta l -fg " ++ fg ++ " -bg " ++ bg
+
+-- |
+-- -- Helper function which provides ToggleStruts keybinding
+-- --
+toggleStrutsKey :: XConfig t -> (KeyMask, KeySym)
+toggleStrutsKey XConfig{modMask = modm} = (modm, xK_b )
