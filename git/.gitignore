@@ -1,22 +1,3 @@
-.bash_history
-.Xauthority
-.serverauth*
-.viminfo
-.lesshst
-.getmail/oldmail*
-.maildir
-.maildir-sent
-.dbus/session-bus/*
-.themes/*
-projects/
-.ssh/known_hosts
-.fontconfig/*.cache-2
-.sqlite_history
-.mutt/hcache
-.mairix-db
-.mairix-results
-.mysql_history
-.cache
-.gajim
-.vim/colors
-.vimperator/info
+# swap
+.*.s[a-w][a-z]
+.s[a-w][a-z]
