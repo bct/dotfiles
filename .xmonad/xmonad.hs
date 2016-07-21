@@ -22,6 +22,9 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Grid
 import XMonad.Layout.IM
 import Data.Ratio ((%))
+import XMonad.Layout.SimpleDecoration
+
+import XMonad.Layout.NoBorders
 
 import XMonad.Layout.Tabbed
 import XMonad.Util.Themes
@@ -35,11 +38,13 @@ import XMonad.Actions.SpawnOn(spawnHere, shellPromptHere, spawnOn)
 import Control.Monad(Monad(return, (>>=), (>>)), Functor(..), (=<<), mapM, sequence, (<=<), zipWithM_)
 import XMonad.Actions.GridSelect
 
-import XMonad.Layout.Reflect
-
 import XMonad.Actions.PhysicalScreens
 
 import Graphics.X11.ExtraTypes.XF86
+
+-- local lib dir
+import Style
+import MyDzen
 
 -- The list of all topics/workspaces of your xmonad configuration.
 -- The order is important, new topics must be inserted
@@ -47,7 +52,7 @@ import Graphics.X11.ExtraTypes.XF86
 -- to work.
 myTopics :: [Topic]
 myTopics =
- [ "stripe" , "web", "mail", "mi-go", "?", "doc", "music" ]
+ [ "stripe" , "web", "mail", "mi-go", "?", "doc", "music", "office" ]
 
 myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
@@ -64,7 +69,7 @@ myTopicConfig = TopicConfig
         [
           ("?",          spawnShell >>
                          spawn "urxvt -e htop")
-        , ("mi-go",      spawn "urxvt -e ssh mi-go.diffeq.com")
+        , ("mi-go",      spawn "urxvt -e ssh mi-go.lan")
         , ("web",        spawn "firefox")
         , ("stripe",     spawnShell >*> 5)
         ]
@@ -131,9 +136,12 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask,               xK_j     ), windows W.focusDown)
 
     -- Media buttons
---    , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer -c1 set Master 2-")
---    , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer -c1 set Master 2+")
---    , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")
+    , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer -D pulse sset Master 5%-")
+    , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer -D pulse sset Master 5%+")
+    , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")
+
+    -- Shift+Insert
+    , ((mod4Mask             , xK_t     ), spawn "xdotool key --clearmodifiers Shift+Insert")
 
     -- Lock the screen
     , ((modMask .|. shiftMask, xK_l     ), spawn "slock")
@@ -176,6 +184,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     -- Restart xmonad
     , ((modMask              , xK_q     ), restart "xmonad" True)
+
+    , ((0,       xF86XK_MonBrightnessUp ), spawn "xbacklight +19")
+    , ((0,       xF86XK_MonBrightnessDown ), spawn "xbacklight -19")
 
     ]
 
@@ -236,9 +247,9 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- restarting (with 'mod-q') to reset your layout state to the new
 -- defaults, as xmonad preserves your old layout settings by default.
 --
-myLayout = stripeWorkspace $ webWorkspace $ dashboard $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
+myLayout = avoidStruts $ smartBorders $ stripeWorkspace $ webWorkspace $ dashboard $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
   where
-     dashboard       = onWorkspace "?"      Grid
+     dashboard       = onWorkspace "?"      $ simpleDeco shrinkText defaultTheme (Grid ||| tiled)
      webWorkspace    = onWorkspace "web"    tabbed
      stripeWorkspace = onWorkspace "stripe" $ Mirror tiled
 
@@ -269,28 +280,37 @@ myLayout = stripeWorkspace $ webWorkspace $ dashboard $ (tiled ||| Mirror tiled 
 --
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
+    , className =? "mplayer2"       --> doFloat
+    , className =? "mpv"            --> doFloat
     , className =? "feh"            --> doFloat
     , title     =? "QEMU"           --> doFloat
     ]
 
 ------------------------------------------------------------------------
 -- Status bars and logging
+--
+myLogHook dzenPipe = dynamicLogWithPP $ myDzenPP Style.defaultStyle dzenPipe
 
-freeMemory = logCmd "/usr/bin/free -m | awk '/buffers\\/cache/ { print $3 }'"
-
-myLogHook = dynamicLogWithPP $ defaultPP {
-                ppCurrent = dzenColor "white" "#6688bb" . pad
-              , ppVisible = dzenColor "white" "black"   . pad
-              , ppUrgent  = dzenColor "black" "yellow"   . dzenStrip
-              , ppTitle = dzenEscape
-              , ppExtras = [ loadAvg, freeMemory, date "%m-%d %X" ]
-            }
+myLogHookBar = defaultDzen
+ -- use the default as a base and override width and
+ -- colors
+ { width   = Just $ Percent 100
+ , font    = Just $ Style.defaultFont defaultStyle
+ , height  = Just $ 22
+ , fgColor = Just $ Style.dzenFGColor defaultStyle
+ , bgColor = Just $ Style.dzenBGColor defaultStyle
+ , screen  = Just 0
+ }
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
-main = xmonad =<< myDzen myConfig
+--main = xmonad myConfig
+main = do
+  dzenPipe <- spawnDzen myLogHookBar
 
-myConfig = defaultConfig {
+  xmonad $ myConfig dzenPipe
+
+myConfig dzenPipe = defaultConfig {
   -- simple stuff
     terminal           = "urxvt",
     focusFollowsMouse  = True,
@@ -308,14 +328,9 @@ myConfig = defaultConfig {
 
   -- hooks, layouts
     layoutHook         = myLayout,
-    manageHook         = myManageHook <+> manageDocks
+    manageHook         = myManageHook <+> manageDocks,
+    logHook            = myLogHook dzenPipe
 }
-
-myDzen conf = statusBar ("dzen2 " ++ flags) dzenPP toggleStrutsKey conf
- where
-    fg      = "'#a8a3f7'" -- n.b quoting
-    bg      = "'#3f3c6d'"
-    flags   = "-e 'onstart=lower' -w 800 -ta l -fg " ++ fg ++ " -bg " ++ bg
 
 -- |
 -- -- Helper function which provides ToggleStruts keybinding
