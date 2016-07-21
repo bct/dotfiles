@@ -10,7 +10,7 @@ module MyDzen where
 import Data.List (intercalate)
 import System.IO
 import System.Posix.IO
-import System.Process
+import System.Process (runInteractiveCommand)
 import System.Posix.Process (executeFile, forkProcess, createSession)
 import XMonad.Hooks.DynamicLog hiding (dzen)
 import Graphics.X11.Xlib     (openDisplay)
