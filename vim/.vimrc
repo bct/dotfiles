@@ -37,7 +37,9 @@ augroup vimrcEx
 augroup END
 
 " oooh so pretty
-"colorscheme railscasts
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
 
 filetype indent on
 filetype plugin on
