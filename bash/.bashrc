@@ -3,18 +3,6 @@
 # that can't tolerate any output.  So make sure this doesn't display
 # anything or bad things will happen !
 
-alias aoeu="setxkbmap us"
-alias asdf="setxkbmap dvorak"
-
-export LANG="en_GB.utf8"
-export RUBYOPT="-rubygems"
-export PYTHONPATH="/usr/local/lib/python2.6/site-packages/"
-export PATH="$PATH:/home/bct/bin"
-export XDG_DATA_HOME=~/.local/share
-export EDITOR=vim
-export VTERM=urxvtc
-#export VISUAL='urxvt -e vim'
-
 # Test for an interactive shell.  There is no need to set anything
 # past this point for scp and rcp, and it's important to refrain from
 # outputting anything in those cases.
@@ -41,12 +29,14 @@ bind -m vi-insert 'Control-l: clear-screen'
 
 export HISTCONTROL=ignoredups
 
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -64,16 +54,18 @@ if ! shopt -oq posix; then
   fi
 fi
 
-[ -f ~/stripe/password-vault/bash_completion ] && . ~/stripe/password-vault/bash_completion
-
-
-if [ -d ~/stripe/space-commander/bin/ ] && [ -d ~/.stripe/aws/ssh/ ]; then
-  alias ssh="sc-ssh-wrapper"
-fi
-
-check ()
-{
-  ssh cave "cd /pay/deploy/checker/current; /usr/stripe/bin/stripe-bundle checker checker/bin/checker -r $1"
-}
-
 . /usr/share/autojump/autojump.sh
+
+export PATH=/home/brendan/bin:/usr/local/bin:$PATH
+. /home/brendan/.rbenvrc
+. ~/.stripe-repos.sh
+export PATH=/usr/local/bin:$PATH
+
+source /home/brendan/.nix-profile/etc/profile.d/nix.sh
+
+alias aoeu="setxkbmap us"
+alias asdf="setxkbmap dvorak"
+
+export LANG="en_GB.utf8"
+export EDITOR=vim
+export VTERM=urxvtc
