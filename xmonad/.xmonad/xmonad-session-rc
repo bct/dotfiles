@@ -4,6 +4,4 @@ export GPG_AGENT_INFO SSH_AUTH_SOCK
 trayer --edge top --align right --width 20 --transparent true --tint 0x33 --height 20 &
 nm-applet &
 
-# /home/brendan/.dropbox-dist/dropboxd &
-
 /home/brendan/bin/dzen-battery.sh &
