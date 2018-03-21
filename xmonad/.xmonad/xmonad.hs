@@ -42,6 +42,8 @@ import XMonad.Actions.PhysicalScreens
 
 import Graphics.X11.ExtraTypes.XF86
 
+import XMonad.Hooks.SetWMName
+
 -- local lib dir
 import Style
 import MyDzen
@@ -52,7 +54,7 @@ import MyDzen
 -- to work.
 myTopics :: [Topic]
 myTopics =
- [ "stripe" , "web", "mail", "mi-go", "?", "doc", "music", "office" ]
+ [ "stripe" , "web", "mail", "mi-go", "?", "doc", "music", "office" , "surf", "zoom"]
 
 myTopicConfig :: TopicConfig
 myTopicConfig = TopicConfig
@@ -69,8 +71,9 @@ myTopicConfig = TopicConfig
         [
           ("?",          spawnShell >>
                          spawn "urxvt -e htop")
-        , ("mi-go",      spawn "urxvt -e ssh mi-go.lan")
-        , ("web",        spawn "firefox")
+        , ("mi-go",      spawn "urxvt -tn rxvt-unicode-256color -e ssh bct@mi-go.diffeq.com")
+        , ("surf",       spawn "firefox")
+        , ("web",        spawn "chromium-browser --force-device-scale-factor=1.8")
         , ("stripe",     spawnShell >*> 5)
         ]
     }
@@ -139,6 +142,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((0, xF86XK_AudioLowerVolume   ), spawn "amixer -D pulse sset Master 5%-")
     , ((0, xF86XK_AudioRaiseVolume   ), spawn "amixer -D pulse sset Master 5%+")
     , ((0, xF86XK_AudioMute          ), spawn "amixer -D pulse set Master toggle")
+    -- xF86XK_AudioMicMute
+    , ((0, 0x1008FFB2                ), spawn "amixer -D pulse set Capture toggle")
 
     -- Shift+Insert
     , ((mod4Mask             , xK_t     ), spawn "xdotool key --clearmodifiers Shift+Insert")
@@ -247,10 +252,11 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- restarting (with 'mod-q') to reset your layout state to the new
 -- defaults, as xmonad preserves your old layout settings by default.
 --
-myLayout = avoidStruts $ smartBorders $ stripeWorkspace $ webWorkspace $ dashboard $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
+myLayout = avoidStruts $ smartBorders $ stripeWorkspace $ surfWorkspace $ webWorkspace $ dashboard $ (tiled ||| Mirror tiled ||| tabbed ||| Full)
   where
      dashboard       = onWorkspace "?"      $ simpleDeco shrinkText defaultTheme (Grid ||| tiled)
      webWorkspace    = onWorkspace "web"    tabbed
+     surfWorkspace   = onWorkspace "surf"    tabbed
      stripeWorkspace = onWorkspace "stripe" $ Mirror tiled
 
      tabbed   = tabbedAlways shrinkText tabTheme
@@ -329,7 +335,11 @@ myConfig dzenPipe = defaultConfig {
   -- hooks, layouts
     layoutHook         = myLayout,
     manageHook         = myManageHook <+> manageDocks,
-    logHook            = myLogHook dzenPipe
+    logHook            = myLogHook dzenPipe,
+
+  -- otherwise IntelliJ doesn't start? wtf.
+  -- https://bbs.archlinux.org/viewtopic.php?id=95437
+    startupHook        = setWMName "LG3D"
 }
 
 -- |

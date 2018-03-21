@@ -19,7 +19,7 @@ data StyleConfig = StyleConfig
 -- -unknown-DejaVu Sans Mono-normal-normal-normal--14-*-*-*-m-0-iso10646-1
 -- "-*-montecarlo-medium-r-normal-*-11-*-*-*-c-*-*-*"
 defaultStyle = StyleConfig
-               { defaultFont = "-unknown-DejaVu Sans Mono-normal-normal-normal--12-*-*-*-m-0-iso10646-1"
+               { defaultFont = "Terminus:pixelsize=18"
                , iconDir = "/home/daniel/.dzen/xbm8x8"
                , dzenFGColor = greyTone 120
                , dzenFGColor2 = greyTone 170
