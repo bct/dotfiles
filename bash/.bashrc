@@ -27,7 +27,9 @@ set -o vi
 # make ^L work
 bind -m vi-insert 'Control-l: clear-screen'
 
+export HISTSIZE=10000
 export HISTCONTROL=ignoredups
+shopt -s histappend
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -69,3 +71,39 @@ alias asdf="setxkbmap dvorak"
 export LANG="en_GB.utf8"
 export EDITOR=vim
 export VTERM=urxvtc
+
+alias cur-apiori="curl -sSf https://api.stripe.com/healthcheck | cut -d. -f1-2"
+alias ssh=sc-ssh
+alias mosh="mosh --ssh=sc-ssh"
+source ~/stripe/space-commander/bin/sc-aliases
+
+#if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+#  export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+#fi
+
+SSH_ENV="$HOME/.ssh/env"
+
+function start_agent {
+  echo "Initialising new SSH agent..."
+  /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+  chmod 600 "${SSH_ENV}"
+  . "${SSH_ENV}" > /dev/null
+  /usr/bin/ssh-add
+
+  # load up the SSH key used for github
+  SSH_ASKPASS=/home/brendan/bin/git_ssh_pass ssh-add ~/.ssh/id_rsa_brendan@stripe.com </dev/null
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+  . "${SSH_ENV}" > /dev/null
+  pgrep ssh-agent$ >/dev/null || start_agent
+else
+  start_agent
+fi
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
