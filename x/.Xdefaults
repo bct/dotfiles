@@ -9,7 +9,8 @@ Xcursor.theme: Neutral_Plus
 ! U R X V T
 !
 !
-URxvt*font: xft:Droid Sans Mono:medium:pixelsize=16
+URxvt*font: xft:Inconsolata:medium:pixelsize=20
+!URxvt*font: xft:Terminus:medium:pixelsize=18
 !
 !URxvt*font: -windows-proggycleansz-medium-r-normal--13-80-96-96-c-70-*-*
 !URxvt*boldFont: -windows-proggycleansz-medium-r-normal--13-80-96-96-c-70-*-*
@@ -26,6 +27,7 @@ URxvt*scrollBar: false
 URxvt*loginShell: true
 URxvt*shading: 30
 URxvt*termName: rxvt-unicode
+URxvt.perl-ext-common: default,tabbed,matcher,resize-font,-tabbed
 #urxvt*perl-lib: /usr/lib/urxvt/perl/
 !URxvt*perl-ext-common: default,matcher
 #urxvt*perl-ext-common: default,matcher,searchable-scrollback
