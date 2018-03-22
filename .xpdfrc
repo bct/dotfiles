@@ -1,7 +1,0 @@
-# viKeys
-bind h any scrollLeft(16)
-bind l any scrollRight(16)
-bind k any scrollUpPrevPage(16)
-bind j any scrollDownNextPage(16)
-
-continuousView yes
