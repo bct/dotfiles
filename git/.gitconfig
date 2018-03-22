@@ -8,7 +8,11 @@
 [push]
 	default = simple
 [alias]
+  bru = !branch=$(git rev-parse --abbrev-ref HEAD) && git config branch.$branch.remote ${1:-origin} && git config branch.$branch.merge refs/heads/${2:-$branch} && :
+  cobu = !git checkout -b ${1:-tmp} && git bru ${2:-origin}
   lol = log --graph --pretty=format:\"%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%ce%Creset %s\"
   lola = log --graph --all --pretty=format:\"%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%ce%Creset %s\"
 [core]
 	excludesfile = /home/brendan/.gitignore
+[rebase]
+	autosquash = true
