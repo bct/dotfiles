@@ -6,9 +6,9 @@
 
 BATFOLDER='/sys/class/power_supply/BAT0' # battery's info folder
 
-GFG='#333'  # color of the gauge
+GFG='#999'  # color of the gauge
 GH=7       # height of the gauge
-GBG='#999'  # color of gauge background
+GBG='#333'  # color of gauge background
 GW=50      # width of the gauge
 LOWBAT=25        # percentage of battery life marked as low
 LOWCOL='#ff4747' # color when battery is low
@@ -16,16 +16,15 @@ TIME_INT=10      # time interval in seconds
 
 # The following variables should be inherited from the calling
 # environment, but set here 'just in case'
-BG=${BG:-'grey'}  # dzen backgrounad
-FG=${FG:-'black'}  # dzen foreground
+BG=${BG:-'#111'}  # dzen backgrounad
+FG=${FG:-'grey'}  # dzen foreground
 BAT_BEGIN=${BAT_BEGIN:-800}
-BAT_W=${BAT_W:-170}     # width of the dzen bar
+BAT_W=${BAT_W:-370}     # width of the dzen bar
 ICONPATH=${ICONPATH:-'/donnees/images/icons'}
 
-FN=${FN:-'-*-clean-*-*-*-*-*-120-*-*-*-*-iso8859-*'} # font
+FN=${FN:-'Terminus:pixelsize=17'} # font
 
 while true; do
-    sleep $TIME_INT;
     # look up battery's data
     BAT_FULL=`cat $BATFOLDER/energy_full`
     STATUS=`cat $BATFOLDER/status`
@@ -51,19 +50,33 @@ while true; do
 
 	    echo -n " ^i(${ICONPATH}/battery.xbm)"
 	    echo $RPERC | dzen2-gdbar -h $GH -w $GW -fg $GFG_ -bg $GBG -nonl
-	    echo " (${TIMELFT} min)"
+	    echo -n " (${TIMELFT} min)"
 	    ;;
 	Charging )
 	    echo -n " ^i(${ICONPATH}/power-ac.xbm)"
 	    echo $RPERC | dzen2-gdbar -h $GH -w $GW -fg $GFG_ -bg $GBG -nonl
-	    echo " (charging)"
+	    echo -n " (charging)"
 	    ;;
 	Full )
 	    echo -n " ^i(${ICONPATH}/power-ac.xbm)"
 	    echo $RPERC | dzen2-gdbar -h $GH -w $GW -fg $GFG_ -bg $GBG -nonl
-	    echo " (full)"
+	    echo -n " (full)"
 	    ;;
 	* )
 	    echo -n " ??? $STATUS" ;;
     esac
+
+    echo -n ' ^i(/usr/share/dzen2/bitmaps/ball.xbm) '
+
+    # local time
+    echo -n $(date +'%b %d %H:%M')
+
+    echo -n ' ^i(/usr/share/dzen2/bitmaps/ball.xbm) '
+
+    # UTC
+    echo -n $(date --utc +%H:%M)
+
+    echo
+
+    sleep $TIME_INT;
 done | dzen2 -ta l -tw $BAT_W -x $BAT_BEGIN -fg $FG -bg $BG -fn $FN
